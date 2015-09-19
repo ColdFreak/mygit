@@ -14,7 +14,6 @@ defmodule Mygit do
     usage= ~s(mygit --configure\n  Accept a github token to create the '.mygit.conf' file\nmygit --repo=testrepo\n  Create a repo named 'testrepo'
     )
     IO.puts usage
-
   end
   
   # ./mygit --repo=hello
@@ -32,8 +31,11 @@ defmodule Mygit do
     url = Application.get_env(:mygit, :post_url)
     # 送信するjsonデータを組み立てる
     json_data = %{name: name, auto_init: true, private: false, gitignore_template: "nanoc"} |> Poison.encode!
-    HTTPoison.post!(url, json_data, headers)
+    response = HTTPoison.post!(url, json_data, headers)
+    result = handle_response(response)
+    IO.puts result
   end
+
 
   def process([{:configure, true} | _T]) do
     input = IO.gets "Please input your token: "
@@ -46,6 +48,14 @@ defmodule Mygit do
     File.close file
   end
   
+  def handle_response(%HTTPoison.Response{status_code: 201}) do
+    "Repository created successfully"
+  end
+
+  def handle_response(%HTTPoison.Response{status_code: 422}) do
+    "Repository name already exists on this account. Failed"
+  end
+
   def get_token(file) do
     try do
       {result, device} = File.open(file, [:read, :utf8])
