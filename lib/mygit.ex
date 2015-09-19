@@ -11,7 +11,10 @@ defmodule Mygit do
   end
 
   def process([]) do
-    IO.puts "No arguments given"
+    usage= ~s(mygit --configure\n  Accept a github token to create the '.mygit.conf' file\nmygit --repo=testrepo\n  Create a repo named 'testrepo'
+    )
+    IO.puts usage
+
   end
   
   # ./mygit --repo=hello
