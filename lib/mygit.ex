@@ -59,7 +59,7 @@ defmodule Mygit do
   end
 
   def handle_response(%HTTPoison.Response{status_code: 422}, name) do
-    "Repository #{name} already exists on this account. Failed"
+    "Repository '#{name}' already exists on this account. Failed"
   end
 
   def get_token(file) do
