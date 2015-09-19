@@ -14,6 +14,12 @@ Githubのレポジトリをローカルで作成するクライアント
 $ mix deps.get
 $ mix escript.build
 
+$ ./mygit  # 使い方が表示されます
+mygit --configure
+  Accept a github token to create the '.mygit.conf' file
+  mygit --repo=testrepo
+    Create a repo named 'testrepo'
+
 $ ./mygit --configure # githubのtokenが要求される
 Please input your token:
 
