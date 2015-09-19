@@ -2,7 +2,13 @@ mygit
 ===
 
 Githubのレポジトリをローカルで作成するクライアント
-まず最初に`./mygit --configure`を実行して，Githubトークンを貼り付けます．
+
+まず最初に`./mygit --configure`を実行して，Githubトークンを貼り付けて，
+
+`token=*****`の形で`$HOME/.mygit.conf`ファイルに保存されます．
+
+`$ ./mygit --repo=testrepo`でレポジトリを作成します．
+
 
 ```
 $ mix deps.get
@@ -14,8 +20,8 @@ Please input your token:
 $ ./mygit
 mygit --configure
   Accept a github token to create the '.mygit.conf' file
-  mygit --repo=testrepo
-    Create a repo named 'testrepo'
+mygit --repo=testrepo
+  Create a repo named 'testrepo'
 
 $ ./mygit --repo=testrepo # github.comにtestrepoレポジトリが作成される
 Repository 'testrepo' created successfully.
