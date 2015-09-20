@@ -23,12 +23,6 @@ mygit --repo=testrepo
 $ ./mygit --configure # githubのtokenが要求される
 Please input your token:
 
-$ ./mygit
-mygit --configure
-  Accept a github token to create the '.mygit.conf' file
-mygit --repo=testrepo
-  Create a repo named 'testrepo'
-
 $ ./mygit --repo=testrepo # github.comにtestrepoレポジトリが作成される
 Repository 'testrepo' created successfully.
 You can clone the repository using the following command
