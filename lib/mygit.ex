@@ -49,7 +49,8 @@ defmodule Mygit do
   def handle_response(%HTTPoison.Response{body: body, status_code: 201}, name) do
     decoded_body = body |> Poison.decode!
     {:ok, git_url} = decoded_body |> Map.fetch("git_url")
-    output = ~s(Repository '#{name}' created successfully.\nYou can clone the repository using the following command\n\ngit clone #{git_url}\n )
+    clone_git = parse_url(git_url)
+    output = ~s(Repository '#{name}' created successfully.\nYou can clone the repository using the following command\n\ngit clone #{clone_git}\n )
     output
 
   end
@@ -82,5 +83,11 @@ defmodule Mygit do
       _ ->
         input_token
     end
+  end
+
+  # `git://github.com/ColdFreak/test.git` -> `git@github.com:ColdFreak/test.git`
+  def parse_url(git_url) do
+    url = String.replace(git_url, "git://github.com/", "git@github.com:") 
+    url
   end
 end
