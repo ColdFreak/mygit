@@ -8,8 +8,8 @@ dependencies:
     - deps
   
 
-  test:
-    override:
-      - script/ci/test.sh
-      - mkdir -p $$CIRCLE_TEST_REPORTS/exunit
-      - cp _build/test/test-junit-report.xml $CIRCLE_TEST_REPORTS/exunit
+test:
+  override:
+    - script/ci/test.sh
+    - mkdir -p $$CIRCLE_TEST_REPORTS/exunit
+    - cp _build/test/test-junit-report.xml $CIRCLE_TEST_REPORTS/exunit
