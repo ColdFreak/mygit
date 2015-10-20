@@ -87,6 +87,7 @@ defmodule Mygit do
 
   # `git://github.com/ColdFreak/test.git` -> `git@github.com:ColdFreak/test.git`
   def parse_url(git_url) do
+    IO.puts "git_url = #{git_url}"
     url = String.replace(git_url, "git://github.com/", "git@github.com:") 
     url
   end
