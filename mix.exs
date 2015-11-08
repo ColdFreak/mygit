@@ -32,7 +32,8 @@ defmodule Git.Mixfile do
   defp deps do
     [
       {:httpoison, "~> 0.7.2"},
-      {:poison, "~> 1.5"}
+      {:poison, "~> 1.5"},
+      {:junit_formatter, "~> 0.0.3", only: :test}
     ]
   end
 end
