@@ -5,13 +5,13 @@ defmodule Mygit do
   end
 
   defp parse_args(args) do
-    {options, _, _} = OptionParser.parse(args, switches: [repo: :string, configure: :boolean ])
+    {options, _, _} = OptionParser.parse(args, switches: [repo: :string, configure: :boolean, list: :boolean ])
     # options is a Keyword list
     options
   end
 
   def process([]) do
-    usage= ~s(mygit --configure\n  Accept a github token to create the '.mygit.conf' file\nmygit --repo=testrepo\n  Create a repo named 'testrepo'
+    usage= ~s(mygit --configure\n  Accept a github token to create the '.mygit.conf' file\nmygit --repo=testrepo\n  Create a repo named 'testrepo'\n mygit --list\n  List remote repos
     )
     IO.puts usage
   end
@@ -45,6 +45,29 @@ defmodule Mygit do
     IO.binwrite file, "token=#{input_token}"
     File.close file
   end
+
+  def process([{:list, true} | _T]) do
+    url = Application.get_env(:mygit, :post_url)
+    home = System.user_home
+    conf_file = Path.join([home, ".mygit.conf"])
+    case get_token(conf_file) do
+     {:ok, token} -> headers = [{"Authorization", "token #{token}"}]
+     {:error, _} -> 
+       IO.puts "failed to retrieve token from $HOME/.mygit.conf"
+       exit("exit")
+    end
+    response = HTTPoison.get!(url, headers)
+    result = handle_list_response(response)
+    print_list(result)
+  end
+
+  ## [ok: "git@github.com:ColdFreak/Addition.git", ok: "git@github.com:ColdFreak/aws-test.git"]
+  ## Enum.mapの結果は上のような結果が帰ってきて，Keyword.valuesでvalueを抽出する
+  def handle_list_response(%HTTPoison.Response{body: body, status_code: 200}) do
+    decoded_body = body |> Poison.decode!
+    repo_list = Enum.map(decoded_body, fn(item) -> Map.fetch(item, "ssh_url") end) |> Keyword.values
+    repo_list
+  end
   
   def handle_response(%HTTPoison.Response{body: body, status_code: 201}, name) do
     decoded_body = body |> Poison.decode!
@@ -65,7 +88,7 @@ defmodule Mygit do
 
   def get_token(file) do
     try do
-      {result, device} = File.open(file, [:read, :utf8])
+      {_result, device} = File.open(file, [:read, :utf8])
       token = IO.read(device, :line) |> String.split("=") |> Enum.at(1) 
       {:ok, token}
     rescue
@@ -89,5 +112,9 @@ defmodule Mygit do
   def parse_url(git_url) do
     url = String.replace(git_url, "git://github.com/", "git@github.com:") 
     url
+  end
+
+  def print_list(list) do
+    Enum.map(list, fn(item) -> IO.puts item end)
   end
 end
