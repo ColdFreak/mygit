@@ -28,4 +28,8 @@ Repository 'testrepo' created successfully.
 You can clone the repository using the following command
 
 git clone git://github.com/ColdFreak/testrepo.git
+
+$ ./mygit --list
+git@github.com:***/***.git
+git@github.com:***/***.git
 ```

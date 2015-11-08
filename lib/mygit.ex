@@ -115,6 +115,6 @@ defmodule Mygit do
   end
 
   def print_list(list) do
-    Enum.map(list, fn(item) -> IO.puts item<>"\n" end)
+    Enum.map(list, fn(item) -> IO.puts item end)
   end
 end
