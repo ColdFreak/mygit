@@ -15,22 +15,22 @@ defmodule Mygit do
     )
     IO.puts usage
   end
-  
+
   # ./mygit --repo=hello
   # helloというレポジトリが作成される
   def process([{:repo , name} | _T]) do
     home = System.user_home
     conf_file = Path.join([home, ".mygit.conf"])
-    case get_token(conf_file) do
-      {:ok, token} -> headers = [{"Authorization", "token #{token}"}]
-      {:error, _} -> 
+    headers = case get_token(conf_file) do
+      {:ok, token} ->  [{"Authorization", "token #{token}"}]
+      {:error, _} ->
         IO.puts "failed to retrieve token from $HOME/.mygit.conf"
         exit("exit")
     end
-  
+
     url = Application.get_env(:mygit, :post_url)
     # 送信するjsonデータを組み立てる
-    json_data = %{name: name, auto_init: true, private: false, gitignore_template: "nanoc"} |> Poison.encode!
+    json_data = %{name: name, auto_init: false, private: false, gitignore_template: "elixir"} |> Poison.encode!
     response = HTTPoison.post!(url, json_data, headers)
     result = handle_response(response, name)
     IO.puts result
@@ -50,9 +50,9 @@ defmodule Mygit do
     url = Application.get_env(:mygit, :post_url)
     home = System.user_home
     conf_file = Path.join([home, ".mygit.conf"])
-    case get_token(conf_file) do
-     {:ok, token} -> headers = [{"Authorization", "token #{token}"}]
-     {:error, _} -> 
+    headers = case get_token(conf_file) do
+     {:ok, token} -> [{"Authorization", "token #{token}"}]
+     {:error, _} ->
        IO.puts "failed to retrieve token from $HOME/.mygit.conf"
        exit("exit")
     end
@@ -68,7 +68,7 @@ defmodule Mygit do
     repo_list = Enum.map(decoded_body, fn(item) -> Map.fetch(item, "ssh_url") end) |> Keyword.values
     repo_list
   end
-  
+
   def handle_response(%HTTPoison.Response{body: body, status_code: 201}, name) do
     decoded_body = body |> Poison.decode!
     {:ok, git_url} = decoded_body |> Map.fetch("git_url")
