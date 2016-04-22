@@ -30,7 +30,8 @@ defmodule Mygit do
 
     url = Application.get_env(:mygit, :post_url)
     # 送信するjsonデータを組み立てる
-    json_data = %{name: name, auto_init: false, private: false, gitignore_template: "elixir"} |> Poison.encode!
+    #json_data = %{name: name, auto_init: false, private: false, gitignore_template: "nanoc"} |> Poison.encode!
+    json_data = %{name: name, auto_init: false, private: false} |> Poison.encode!
     response = HTTPoison.post!(url, json_data, headers)
     result = handle_response(response, name)
     IO.puts result
