@@ -1,0 +1,55 @@
+#+TITLE: mygit
+#+AUTHOR: 王志軍
+#+DATE: <2016-08-02 Tue>
+#+STARTUP: showall
+#+INFOJS_OPT: mouse:underline buttons:0 path:http://thomasf.github.io/solarized-css/org-info.min.js
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://thomasf.github.io/solarized-css/solarized-light.min.css" />
+
+
+** 概要
+
+Githubのレポジトリをローカルから作成するクライアント。
+
+** 使い方
+*** コンパイルして、実行ファイルを生成
+
+#+begin_src shell
+$ mix deps.get
+$ mix escript.build
+#+end_src
+
+*** Githubのトークンを用意
+
+下のコマンドを実行して，Githubトークンを貼り付けます。
+#+begin_src shell
+$ ./mygit --configure
+#+end_src
+
+トークンは ~token=*****~ の形で ~$HOME/.mygit.conf~ ファイルに保存されます。
+
+*** レポジトリを作成
+#+begin_src shell
+$ ./mygit --repo=testrepo
+#+end_src
+
+*** 使い方を表示
+#+begin_src shell
+$ ./mygit
+mygit --configure
+  Accept a github token to create the '.mygit.conf' file
+mygit --repo=testrepo
+  Create a repo named 'testrepo'
+
+$ ./mygit --configure # githubのtokenが要求される
+Please input your token:
+
+$ ./mygit --repo=testrepo # github.comにtestrepoレポジトリが作成される
+Repository 'testrepo' created successfully.
+You can clone the repository using the following command
+
+git clone git://github.com/ColdFreak/testrepo.git
+
+$ ./mygit --list
+git@github.com:***/***.git
+git@github.com:***/***.git
+#+end_src
